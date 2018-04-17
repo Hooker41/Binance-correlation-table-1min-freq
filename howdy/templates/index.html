@@ -39,7 +39,38 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
 <script type="text/javascript">
+    var tabledata = "";
+
+    function downCSV(){
+        console.log(tabledata);
+        let csvContent = "data:text/csv;charset=utf-8,";
+
+        var obj = jQuery.parseJSON( tabledata );
+        var thead_ary= obj.columns;
+        var thead_str = '""';
+        thead_ary.forEach(function(ele) {
+            thead_str += "," + ele;
+        });
+        csvContent += thead_str + "\r\n";
+
+        var tbody_data = obj.data;
+        var tbody_str = "";
+        tbody_data.forEach(function(row, idx) {
+            tbody_str += thead_ary[idx];
+            row.forEach(function(ele, idx) {
+                tbody_str += ',' + ele;
+            });
+            tbody_str += "\r\n";
+        });
+        csvContent += tbody_str;
+        console.log(csvContent);
+
+        var encodedUri = encodeURI(csvContent);
+        window.open(encodedUri);
+    }
+
     $( document ).ready(function() {
+
         setInterval(function(){
             $.ajax({
                 url:'getprice/' ,
@@ -50,6 +81,11 @@
                 success: function(data) {
                     console.log("success");
 
+                    tabledata = data;
+
+                    $('#csv').remove();
+                    $('table').append('<button id="csv" type="button" onclick="downCSV()">Download CSV</button>');
+                    
                     $('tbody').empty();
                     $('thead').empty();
 
@@ -79,7 +115,7 @@
                     alert("Got an error dude "+data);
                 }
             });
-        },60000);
+        },10000);
     });
 </script>
     
