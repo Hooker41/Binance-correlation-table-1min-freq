@@ -58,7 +58,12 @@
         tbody_data.forEach(function(row, idx) {
             tbody_str += thead_ary[idx];
             row.forEach(function(ele, idx) {
-                tbody_str += ',' + ele;
+                if(ele == "1")
+                    tbody_str += ',' + ( parseFloat(ele) * 100 ) + '%';
+                else
+                    tbody_str += ',' + ( parseFloat(ele) * 100 ).toFixed(4) + '%';
+
+                // tbody_str += ',' + ele;
             });
             tbody_str += "\r\n";
         });
@@ -80,7 +85,7 @@
                 dataType: 'html',
                 success: function(data) {
                     console.log("success");
-
+                    console.log(data);
                     tabledata = data;
 
                     $('#csv').remove();
@@ -105,7 +110,10 @@
                     tbody_data.forEach(function(row, idx) {
                         tbody_str += '<tr><td>' + thead_ary[idx] + '</td>';
                         row.forEach(function(ele, idx) {
-                            tbody_str += '<td>' + ele + '</td>';
+                            if(ele == "1")
+                                tbody_str += '<td>' + ( parseFloat(ele) * 100 ) + '%</td>';
+                            else
+                                tbody_str += '<td>' + ( parseFloat(ele) * 100 ).toFixed(4) + '%</td>';
                         });
                         tbody_str += '</tr>';
                     });
