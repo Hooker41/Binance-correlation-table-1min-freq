@@ -42,7 +42,7 @@
     var tabledata = "";
 
     function downCSV(){
-        console.log(tabledata);
+
         let csvContent = "data:text/csv;charset=utf-8,";
 
         var obj = jQuery.parseJSON( tabledata );
@@ -68,10 +68,24 @@
             tbody_str += "\r\n";
         });
         csvContent += tbody_str;
-        console.log(csvContent);
 
         var encodedUri = encodeURI(csvContent);
-        window.open(encodedUri);
+
+        var link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+
+        var currentdate = new Date(); 
+        var datetime = currentdate.getFullYear() + "-"
+                + (currentdate.getMonth()+1)  + "-" 
+                + currentdate.getDate() + "@"  
+                + currentdate.getHours() + "h"  
+                + currentdate.getMinutes() + "m" 
+                + currentdate.getSeconds();
+
+        link.setAttribute("download", datetime + ".csv");
+        document.body.appendChild(link); // Required for FF
+
+        link.click();
     }
 
     $( document ).ready(function() {
@@ -85,7 +99,7 @@
                 dataType: 'html',
                 success: function(data) {
                     console.log("success");
-                    console.log(data);
+                    
                     tabledata = data;
 
                     $('#csv').remove();
